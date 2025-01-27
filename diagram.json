@@ -7,7 +7,7 @@
       "type": "board-pi-pico-w",
       "id": "pico",
       "top": -3.25,
-      "left": 32.35,
+      "left": 128.35,
       "attrs": { "builder": "pico-sdk" }
     },
     { "type": "wokwi-neopixel", "id": "rgb1", "top": 92.5, "left": -97, "attrs": {} },
@@ -45,13 +45,7 @@
     { "type": "wokwi-vcc", "id": "vcc4", "top": -277.64, "left": -384, "attrs": {} },
     { "type": "wokwi-vcc", "id": "vcc5", "top": -364.04, "left": -48, "attrs": {} },
     { "type": "wokwi-gnd", "id": "gnd5", "top": -268.8, "left": -48.6, "attrs": {} },
-    {
-      "type": "wokwi-pushbutton",
-      "id": "btn1",
-      "top": 15.8,
-      "left": 201.6,
-      "attrs": { "color": "green" }
-    }
+    { "type": "wokwi-membrane-keypad", "id": "keypad1", "top": -405.2, "left": 34.4, "attrs": {} }
   ],
   "connections": [
     [ "pico:GP0", "$serialMonitor:RX", "", [] ],
@@ -141,8 +135,14 @@
     [ "rgb23:VSS", "gnd5:GND", "green", [ "v0" ] ],
     [ "rgb24:VSS", "gnd5:GND", "green", [ "v0" ] ],
     [ "rgb25:VSS", "gnd5:GND", "green", [ "v0" ] ],
-    [ "pico:GP6", "btn1:1.l", "green", [ "h-28.8", "v-124.8", "h172.8", "v67.2" ] ],
-    [ "btn1:2.l", "pico:GND.6", "green", [ "h-19.2", "v67.4" ] ]
+    [ "keypad1:R1", "pico:GP2", "green", [ "v9.6", "h-9.6", "v124.8" ] ],
+    [ "keypad1:R2", "pico:GP3", "green", [ "v19.2", "h-29.2", "v96" ] ],
+    [ "keypad1:R3", "pico:GP4", "green", [ "v28.8", "h-48.3", "v124.8" ] ],
+    [ "keypad1:R4", "pico:GP5", "green", [ "v38.4", "h-67.4", "v124.8" ] ],
+    [ "keypad1:C4", "pico:GP19", "green", [ "v9.6", "h9.3", "v240" ] ],
+    [ "keypad1:C3", "pico:GP18", "green", [ "v19.2", "h28.65", "v211.2", "h-19.51" ] ],
+    [ "keypad1:C2", "pico:GP17", "green", [ "v28.8", "h48", "v240" ] ],
+    [ "keypad1:C1", "pico:GP16", "green", [ "v38.4", "h67.1", "v249.6" ] ]
   ],
   "dependencies": {}
 }
