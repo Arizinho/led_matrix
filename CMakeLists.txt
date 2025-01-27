@@ -44,9 +44,11 @@ pico_set_program_version(led_matrix "0.1")
 pico_enable_stdio_uart(led_matrix 1)
 pico_enable_stdio_usb(led_matrix 1)
 
+pico_generate_pio_header(led_matrix ${CMAKE_CURRENT_LIST_DIR}/led_matrix.pio)
+
 # Add the standard library to the build
 target_link_libraries(led_matrix
-        pico_stdlib)
+        pico_stdlib hardware_pio hardware_adc pico_bootrom)
 
 # Add the standard include files to the build
 target_include_directories(led_matrix PRIVATE
