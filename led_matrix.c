@@ -13,12 +13,106 @@
 //número de LEDs
 #define NUM_PIXELS 25
 
+//número de frames
+#define NUM_FRAMES 16
+
 //pino de saída
 #define OUT_PIN 7
 
 //número de linhas e colunas teclado
 #define ROWS 4
 #define COLUMNS 4
+
+//matriz de animação para leds
+bool animacao[NUM_FRAMES][25] = {{0, 0, 0, 0, 0,
+                        0, 1, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        0, 1, 1, 1, 0,
+                        0, 0, 0, 0, 0},
+
+                        {0, 0, 0, 0, 0,
+                        1, 0, 1, 0, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 1, 1, 0, 0,
+                        0, 0, 0, 0, 0},
+
+                        {0, 0, 0, 0, 0,
+                        0, 1, 0, 0, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 1, 0, 0, 0,
+                        0, 0, 0, 0, 0},
+
+                        {0, 0, 0, 0, 0,
+                        1, 0, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 1, 1, 0, 0,
+                        0, 0, 0, 0, 0},
+
+                        {0, 0, 0, 0, 0,
+                        1, 0, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        0, 1, 1, 0, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        0, 1, 0, 0, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 1, 0, 0, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        1, 0, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 1, 1, 0, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        0, 1, 0, 0, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 1, 0, 0, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        1, 0, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        0, 1, 1, 0, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        0, 1, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        0, 1, 1, 1, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 
+                        0, 1, 0, 1, 0,
+                        0, 0, 0, 0, 0,
+                        0, 1, 1, 1, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        0, 1, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        0, 1, 1, 1, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 1, 0, 1, 0,
+                        0, 0, 0, 0, 0, 
+                        1, 0, 0, 0, 1,
+                        0, 1, 1, 1, 0,
+                        0, 0, 0, 0, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        0, 1, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 0, 0, 0,1,
+                        0, 1, 1, 1, 0},
+                        
+                        {0, 0, 0, 0, 0,
+                        0, 1, 0, 1, 0, 
+                        0, 0, 0, 0, 0,
+                        1, 0, 0, 0,1,
+                        0, 1, 1, 1, 0}};
 
 //pinos de linhas e colunas do teclado matricial
 const uint8_t pin_rows[ROWS] = {2, 3, 4, 5};
@@ -89,10 +183,17 @@ void desenha_cor(PIO pio, uint sm, double r, double g, double b){
     }
 }
 
-void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
-    for (int16_t i = 0; i < NUM_PIXELS; i++) {
-        valor_led = matrix_rgb(b, r, g);
-        pio_sm_put_blocking(pio, sm, valor_led);
+void animacao_pio(bool *animacao, PIO pio, uint sm){
+    uint32_t valor_led;
+    for (uint8_t i = 0; i < NUM_PIXELS; i++) {
+        if (animacao[24-i]==1){
+            valor_led = matrix_rgb(0, 1, 0);
+            pio_sm_put_blocking(pio, sm, valor_led);
+        }
+        else{
+            valor_led = matrix_rgb(0, 1, 1);
+            pio_sm_put_blocking(pio, sm, valor_led);
+        }
     }
 }
 
@@ -106,7 +207,6 @@ int main()
     bool ok;
     uint16_t i;
     uint32_t valor_led;
-    double r = 0.0, b = 0.0 , g = 0.0;
 
     //coloca a frequência de clock para 128 MHz, facilitando a divisão pelo clock
     ok = set_sys_clock_khz(128000, false);
@@ -141,6 +241,14 @@ int main()
 
         case 'D':
             desenha_cor(pio, sm, 0, 0.5, 0);
+            break;
+
+        case '1':
+            for (uint8_t j = 0; j < NUM_FRAMES; j++){
+                animacao_pio(animacao[j],pio,sm);
+                sleep_ms(1000);
+            }
+            desenha_cor(pio, sm, 0, 0, 0);
             break;
 
         default:
