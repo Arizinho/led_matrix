@@ -81,18 +81,18 @@ uint32_t matrix_rgb(double b, double r, double g)
 }
 
 //rotina para acionar a matrix de leds - ws2812b
-void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
-
+void desenha_cor(PIO pio, uint sm, double r, double g, double b){
+    uint32_t valor_led;
     for (int16_t i = 0; i < NUM_PIXELS; i++) {
-        if (i%2==0)
-        {
-            valor_led = matrix_rgb(desenho[24-i], r=0.0, g=0.0);
-            pio_sm_put_blocking(pio, sm, valor_led);
+        valor_led = matrix_rgb(b, r, g);
+        pio_sm_put_blocking(pio, sm, valor_led);
+    }
+}
 
-        }else{
-            valor_led = matrix_rgb(b=0.0, desenho[24-i], g=0.0);
-            pio_sm_put_blocking(pio, sm, valor_led);
-        }
+void desenho_pio(double *desenho, uint32_t valor_led, PIO pio, uint sm, double r, double g, double b){
+    for (int16_t i = 0; i < NUM_PIXELS; i++) {
+        valor_led = matrix_rgb(b, r, g);
+        pio_sm_put_blocking(pio, sm, valor_led);
     }
 }
 
@@ -127,11 +127,24 @@ int main()
         tecla = teclado_get();
         switch (tecla)
         {
-        case /* constant-expression */:
-            /* code */
+        case 'A':
+            desenha_cor(pio, sm, 0, 0, 0);
             break;
         
+        case 'B':
+            desenha_cor(pio, sm, 0, 0, 1);
+            break;
+
+        case 'C':
+            desenha_cor(pio, sm, 0.8, 0, 0);
+            break;
+
+        case 'D':
+            desenha_cor(pio, sm, 0, 0.5, 0);
+            break;
+
         default:
+            sleep_ms(1);
             break;
         }
     }
