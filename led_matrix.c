@@ -247,6 +247,10 @@ int main()
             desenha_cor(pio, sm, 0.2, 0.2, 0.2);
             break;
 
+        case '*':
+            reset_usb_boot(0,0);
+            break;
+
         case '1':
             for (uint8_t j = 0; j < NUM_FRAMES; j++){
                 animacao_pio(animacao[j],pio,sm);
