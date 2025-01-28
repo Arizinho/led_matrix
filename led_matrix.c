@@ -187,11 +187,11 @@ void animacao_pio(bool *animacao, PIO pio, uint sm){
     uint32_t valor_led;
     for (uint8_t i = 0; i < NUM_PIXELS; i++) {
         if (animacao[24-i]==1){
-            valor_led = matrix_rgb(0, 1, 0);
+            valor_led = matrix_rgb(0, 0.5, 0);
             pio_sm_put_blocking(pio, sm, valor_led);
         }
         else{
-            valor_led = matrix_rgb(0, 1, 1);
+            valor_led = matrix_rgb(0, 0.5, 0.5);
             pio_sm_put_blocking(pio, sm, valor_led);
         }
     }
@@ -241,6 +241,10 @@ int main()
 
         case 'D':
             desenha_cor(pio, sm, 0, 0.5, 0);
+            break;
+
+        case '#':
+            desenha_cor(pio, sm, 0.2, 0.2, 0.2);
             break;
 
         case '1':
