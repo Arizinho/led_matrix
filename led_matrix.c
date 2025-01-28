@@ -13,9 +13,6 @@
 //número de LEDs
 #define NUM_PIXELS 25
 
-//número de frames
-#define NUM_FRAMES 18
-
 //pino de saída
 #define OUT_PIN 7
 
@@ -23,8 +20,8 @@
 #define ROWS 4
 #define COLUMNS 4
 
-//matriz de animação para leds
-bool animacao2[12][25] = {{1, 0, 1, 0, 1,
+//matriz de quadros para animação do corpo do gato (12 quadros / 25 leds)
+bool cat_body[12][25] = {{1, 0, 1, 0, 1,
                         1, 1, 1, 0, 1, 
                         1, 1, 1, 1, 1,
                         0, 1, 1, 1, 1,
@@ -96,7 +93,8 @@ bool animacao2[12][25] = {{1, 0, 1, 0, 1,
                         1, 1, 1, 1, 1,
                         1, 1, 1, 1, 0}};
 
-bool animacao2_eyes[12][25] = {{0, 0, 0, 0, 0,
+//matriz de quadros para animação da posição dos olhos do gato (12 quadros / 25 leds)
+bool cat_eyes[12][25] = {{0, 0, 0, 0, 0,
                         1, 0, 1, 0, 0, 
                         0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0,
@@ -168,7 +166,9 @@ bool animacao2_eyes[12][25] = {{0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0}};
 
-uint8_t sequencia_imagens[NUM_FRAMES][2] = {{0,1},{1,1},{2,1},{3,1},{0,20},{0,1},{1,1},{2,1},{3,1},{0,20},{4,4},{5,8},{6,1},{7,1},{8,1},{9,1},{10,1},{11,1}};
+//array de sequência dos quadros na animação
+//idenfica: {quadro a ser mostrado, quantidade de frames que o quadro será mostrado}
+uint8_t sequencia_quadros[18][2] = {{0,1},{1,1},{2,1},{3,1},{0,20},{0,1},{1,1},{2,1},{3,1},{0,20},{4,4},{5,8},{6,1},{7,1},{8,1},{9,1},{10,1},{11,1}};
 
 //pinos de linhas e colunas do teclado matricial
 const uint8_t pin_rows[ROWS] = {2, 3, 4, 5};
@@ -239,17 +239,23 @@ void desenha_cor(PIO pio, uint sm, double r, double g, double b){
     }
 }
 
-void animacao_pio(bool *animacao, bool *animacao_eyes, PIO pio, uint sm){
+//rotina para mostrar frames da animação
+void animacao_pio(bool *animacao_body, bool *animacao_eyes, PIO pio, uint sm){
     uint32_t valor_led;
     for (uint8_t i = 0; i < NUM_PIXELS; i++) {
+        //mostra cor verde no led para olhos do gato
         if (animacao_eyes[24-i]==1){
             valor_led = matrix_rgb(0.13, 0.7, 0.9);
             pio_sm_put_blocking(pio, sm, valor_led);
         }
-        else if(animacao[24-i]==1){
+
+        //mostra cor laranja no led para corpo do gato
+        else if(animacao_body[24-i]==1){
             valor_led = matrix_rgb(0.15, 1.0, 0.5);
             pio_sm_put_blocking(pio, sm, valor_led);
         }
+
+        //led apagado para outros casos
         else {
             valor_led = matrix_rgb(0, 0, 0);
             pio_sm_put_blocking(pio, sm, valor_led);
@@ -314,7 +320,7 @@ int main()
         case '1':
             for (uint8_t j = 0; j < NUM_FRAMES; j++){
                 for (uint8_t i = 0; i < sequencia_imagens[j][1]; i++){
-                    animacao_pio(animacao2[sequencia_imagens[j][0]],animacao2_eyes[sequencia_imagens[j][0]],pio,sm);
+                    animacao_pio(cat_body[sequencia_imagens[j][0]],cat_eyes[sequencia_imagens[j][0]],pio,sm);
                     sleep_ms(125);
                 }
             }
