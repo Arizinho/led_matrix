@@ -240,6 +240,7 @@ void desenha_cor(PIO pio, uint sm, double r, double g, double b){
         valor_led = matrix_rgb(b, r, g);
         pio_sm_put_blocking(pio, sm, valor_led);
     }
+    sleep_ms(250);
 }
 
 //rotina para mostrar frames da animação
@@ -330,6 +331,52 @@ int main()
             }
             //apaga LEDs ao final da animação
             desenha_cor(pio, sm, 0, 0, 0);
+            break;
+
+        //informa animação indisponível para teclas 2~9
+        case '2':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '3':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '4':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '5':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '6':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '7':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '8':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '9':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
+            break;
+
+        case '0':
+            printf("Animação indisponível\n");
+            sleep_ms(250);
             break;
 
         default:
